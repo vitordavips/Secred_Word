@@ -26,6 +26,11 @@ function App() {
   const [categoriaEscolhida, setCategoriaEscolhida] = useState();
   const [letras, setLetras] = useState(); 
 
+  const [adivinhouLetras, setAdivinhouLetras] = useState([]);
+  const [letrasErradas, setLetrasErradas] = useState([]);
+  const [chances, setChances] = useState(3);
+  const [pontuacao, setPontuacao] = useState(0);
+
   const escolhaPalavraCategoria = () => {
     // escolha a categoria
     const categorias = Object.keys(words);
@@ -61,14 +66,15 @@ function App() {
      // atualiza os estados
     setCategoriaEscolhida(categoria);
     setPalavraEscolhida(palavra);
-    setLetras(letras);
+    setLetras(letrasPalavras);
 
     setGameStage(Stages[1].name);
   }
 
   // process the letter input - processar a entrada da letra
-  const verifyLetter = () => {
-    setGameStage(Stages[2].name);
+  const verifyLetter = (letra) => {
+    console.log(letra)
+    //setGameStage(Stages[2].name);
   }
 
   // restarts the game
@@ -79,7 +85,18 @@ function App() {
   return (
     <div className='App'>
       {gameStage === "start" && <StartScreen startGame={startGame} />}
-      {gameStage === "game" && <Game verifyLetter={verifyLetter} />}
+      {gameStage === "game" && (
+      <Game 
+        verifyLetter={verifyLetter}
+        palavraEscolhida= {palavraEscolhida}
+        categoriaEscolhida= {categoriaEscolhida}
+        letras = {letras}
+        adivinhouLetras = {adivinhouLetras}
+        letrasErradas = {letrasErradas}
+        chances = {chances}
+        pontuacao = {pontuacao} 
+      />
+    )}
       {gameStage === "end" && <GameOver retry={retry} />}
     </div>
   )

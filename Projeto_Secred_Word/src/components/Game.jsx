@@ -1,33 +1,69 @@
+import { useState, useRef } from 'react';
 import './Game.css';
 
-const Game = ({verifyLetter}) => {
+const Game = ({
+  verifyLetter,  
+  palavraEscolhida,
+  categoriaEscolhida,
+  letras,
+  adivinhouLetras,
+  letrasErradas,
+  chances,
+  pontuacao,
+}) => {
+  const [letra, setLetra] = useState("");
+  const letrasInputRef = useRef(null)
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    verifyLetter(letra);
+    setLetra(""); // Limpa o campo de input após submeter
+    letrasInputRef.current.focus();
+  }
+
   return (
     <div className="game">
       <p className="points">
-        <span>Pontuação: 000</span>
+        <span>Pontuação: {pontuacao}</span>
       </p>
       <h1>Advinhe a palavra:</h1>
       <h3 className='Dica'>
-        Dica sobre a palavra: <span>Dica...</span>
+        Dica sobre a palavra: <span>{categoriaEscolhida}</span>
       </h3>
+      <p>Você ainda tem {chances} tentativas</p>
       <div className="palavraContainer">
-        <span className="letra">A</span>
-        <span className='quadradoEmBranco'></span>
+        {letras.map((letra, i) => 
+          palavraEscolhida.includes(letra) ? (
+            <span key={i} className='letra'>{letra}</span>
+          ) : (
+            <span key={i} className='quadradoEmBranco'></span>
+          )
+        )}
       </div>
       <div className="letraContainer">
         <p>Tente advinhar uma letra da palavra:</p>
-        <form>
-          <input type="text" name='letra' maxLength="1" required />
-          <button>jogar!</button>
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            name='letra' 
+            maxLength="1" 
+            required 
+            value={letra}
+            onChange={(e) => setLetra(e.target.value)}
+            value={letra}
+            ref={letrasInputRef}
+          />
+          <button type="submit">jogar!</button>
         </form>
       </div>
       <div className="containerDeLetrasErradas">
         <p>Letras já utilizadas: </p>
-        <span>a, </span>
-        <span>b, </span>
+        {letrasErradas.map((letraErrada, i) => (
+          <span key={i}>{letraErrada}, </span>
+        ))}
       </div>
     </div>
   )
 }
 
-export default Game
+export default Game;
