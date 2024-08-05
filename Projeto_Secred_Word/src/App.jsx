@@ -73,9 +73,33 @@ function App() {
 
   // process the letter input - processar a entrada da letra
   const verifyLetter = (letra) => {
-    console.log(letra)
-    //setGameStage(Stages[2].name);
-  }
+    const normalizarLetra = letra.toLowerCase();
+
+    //verifique se a letra já foi utilizada
+    if(
+      adivinhouLetras.includes(normalizarLetra) ||
+      letrasErradas.includes(normalizarLetra)
+    ) {
+      return;
+    }
+
+    // push guessed letter or remove a guess
+    if(letras.includes(normalizarLetra)){
+      setAdivinhouLetras((actualAdivinhouLetras) => [
+        ...actualAdivinhouLetras,
+        normalizarLetra
+      ])
+    } else {
+      setLetrasErradas((actualLetrasErradas) => [
+        ...actualLetrasErradas,
+        normalizarLetra,
+      ]);
+    }
+
+    
+  };
+  console.log(adivinhouLetras);
+    console.log(letrasErradas);
 
   // restarts the game
   const retry = () => {

@@ -12,12 +12,12 @@ const Game = ({
   pontuacao,
 }) => {
   const [letra, setLetra] = useState("");
-  const letrasInputRef = useRef(null)
+  const letrasInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     verifyLetter(letra);
-    setLetra(""); // Limpa o campo de input após submeter
+    setLetra(""); // Clear the input field after submitting
     letrasInputRef.current.focus();
   }
 
@@ -33,7 +33,7 @@ const Game = ({
       <p>Você ainda tem {chances} tentativas</p>
       <div className="palavraContainer">
         {letras.map((letra, i) => 
-          palavraEscolhida.includes(letra) ? (
+          adivinhouLetras.includes(letra) ? (
             <span key={i} className='letra'>{letra}</span>
           ) : (
             <span key={i} className='quadradoEmBranco'></span>
@@ -50,7 +50,6 @@ const Game = ({
             required 
             value={letra}
             onChange={(e) => setLetra(e.target.value)}
-            value={letra}
             ref={letrasInputRef}
           />
           <button type="submit">jogar!</button>
