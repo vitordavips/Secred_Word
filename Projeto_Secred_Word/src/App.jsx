@@ -33,7 +33,7 @@ function App() {
   const [chances, setChances] = useState(chancesQti);
   const [pontuacao, setPontuacao] = useState(0);
 
-  const escolhaPalavraCategoria = () => {
+  const escolhaPalavraCategoria = useCallback(() => {
     // escolha a categoria
     const categorias = Object.keys(words);
     const categoria = categorias[Math.floor(Math.random() * categorias.length)];
@@ -51,10 +51,13 @@ function App() {
     console.log('Palavra escolhida:', palavra);
 
     return {palavra, categoria};
-  }
+  }, [words])
 
   // start no secret word
-  const startGame = () => {
+  const startGame = useCallback(() => {
+    // limpar todas as letras
+    limparStadesLetras();
+
     // pick word and pick category - escolha a palavra e escolha a categoria
     const { palavra, categoria } =  escolhaPalavraCategoria();
 
@@ -71,7 +74,7 @@ function App() {
     setLetras(letrasPalavras);
 
     setGameStage(Stages[1].name);
-  }
+  }, [escolhaPalavraCategoria])
 
   // process the letter input - processar a entrada da letra
   const verifyLetter = (letra) => {
@@ -108,6 +111,7 @@ function App() {
     setLetrasErradas([]);
   }
   
+  // fim de jogo
   useEffect(() => {
     if (chances <= 0){
       // redefinir todos os estados
@@ -115,6 +119,21 @@ function App() {
       setGameStage(Stages[2].name);
     }
   }, [chances]);
+
+  // check win
+  useEffect(() => {
+    const uniqueLetras = [... new Set(letras)]
+    
+    // win condition
+    if (adivinhouLetras.length === uniqueLetras.length){
+      // add pontuacao
+      setPontuacao((actualPontuacao) => (actualPontuacao += 100))
+
+      // restart game with new word
+      startGame();
+    }
+
+  }, [adivinhouLetras, letras, startGame])
 
   // restarts the game
   const retry = () => {
