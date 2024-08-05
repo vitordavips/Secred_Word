@@ -139,7 +139,7 @@ function App() {
         pontuacao = {pontuacao} 
       />
     )}
-      {gameStage === "end" && <GameOver retry={retry} />}
+      {gameStage === "end" && <GameOver retry={retry} pontuacao={pontuacao} />}
     </div>
   )
 }
