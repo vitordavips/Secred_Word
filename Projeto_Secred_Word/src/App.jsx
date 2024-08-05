@@ -18,6 +18,8 @@ const Stages = [
   { id: 3, name: "end" },
 ]
 
+const chancesQti = 3
+
 function App() {
   const [gameStage, setGameStage] = useState(Stages[0].name);
   const [words] = useState(wordsList)
@@ -28,7 +30,7 @@ function App() {
 
   const [adivinhouLetras, setAdivinhouLetras] = useState([]);
   const [letrasErradas, setLetrasErradas] = useState([]);
-  const [chances, setChances] = useState(3);
+  const [chances, setChances] = useState(chancesQti);
   const [pontuacao, setPontuacao] = useState(0);
 
   const escolhaPalavraCategoria = () => {
@@ -94,15 +96,31 @@ function App() {
         ...actualLetrasErradas,
         normalizarLetra,
       ]);
+
+      setChances((actualChances) => actualChances - 1)
     }
 
     
   };
-  console.log(adivinhouLetras);
-    console.log(letrasErradas);
+
+  const limparStadesLetras = () => {
+    setAdivinhouLetras([]);
+    setLetrasErradas([]);
+  }
+  
+  useEffect(() => {
+    if (chances <= 0){
+      // redefinir todos os estados
+      limparStadesLetras();
+      setGameStage(Stages[2].name);
+    }
+  }, [chances]);
 
   // restarts the game
   const retry = () => {
+    setPontuacao(0);
+    setChances(chancesQti);
+
     setGameStage(Stages[0].name);
   }
 
